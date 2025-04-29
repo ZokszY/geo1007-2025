@@ -1,0 +1,22 @@
+body {
+    background-color: rgb(255, 220, 173);
+}
+
+ul,
+ol {
+    border: solid 1px black;
+}
+
+ol.first {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+p {
+    border: solid 3px rgb(36, 148, 36)
+}
+
+h1,
+h2 {
+    color: rgb(211, 73, 73);
+    font-style: italic;
+}

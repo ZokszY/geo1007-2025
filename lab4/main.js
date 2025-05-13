@@ -47,9 +47,9 @@ var map = L.map("map-canvas", {
 
 // 2. aerial photo * not working at this moment (see Assignment)
 //    - can be switched on/off by toggle thru L.control.layers (see below in this script)
-var wms_aerial_url = "https://geodata1.nationaalgeoregister.nl/luchtfoto/wms?";
+var wms_aerial_url = "https://service.pdok.nl/hwh/luchtfotorgb/wms/v1_0?";
 var basemap_aerial = new L.tileLayer.wms(wms_aerial_url, {
-  layers: ["luchtfoto_png"],
+  layers: ["Actueel_orthoHR"],
   styles: "",
   format: "image/png",
   transparent: true,
@@ -71,9 +71,46 @@ var sound = new L.tileLayer.wms(wms_sound_url, {
   pointerCursor: true,
 });
 
+// 4. Local WMS layers from GeoServer
+var wms_local_url = "http://localhost:8080/geoserver/alexandre/wms?";
+var wms_local_layers = ["delft_parcels", "GEBOUW_VLAK", "WATERDEEL_VLAK"];
+var wms_local_names = ["Delft parcels [WMS]", "Buildings [WMS]", "Water [WMS]"];
+
+var wms_layers = [];
+var wms_layers_names = [];
+for (var i = 0; i < wms_local_layers.length; i++) {
+  wms_layers.push(L.tileLayer.wms(wms_local_url, {
+    layers: [wms_local_layers[i]],
+    styles: "",
+    format: "image/png",
+    transparent: true,
+    pointerCursor: true,
+  }));
+  wms_layers_names.push(wms_local_names[i]);
+}
+
+// 5. PDOK WMS layers
+var wms_ahn_pdok_url = "https://service.pdok.nl/rws/ahn/wms/v1_0?";
+var wms_ahn_pdok_layers = ["dtm_05m", "dsm_05m"];
+var wms_ahn_pdok_names = ["Digital Terrain Model 0.5m (from AHN)", "Digital Surface Model 0.5m (from AHN)"];
+for (var i = 0; i < wms_ahn_pdok_layers.length; i++) {
+  wms_layers.push(L.tileLayer.wms(wms_ahn_pdok_url, {
+    layers: [wms_ahn_pdok_layers[i]],
+    styles: "",
+    format: "image/png",
+    transparent: true,
+    pointerCursor: true,
+  }));
+  wms_layers_names.push(wms_ahn_pdok_names[i]);
+}
+
 var overlays = {
   "Road noise [WMS]": sound,
 };
+
+for (var i = 0; i < wms_layers.length; i++) {
+  overlays[wms_layers_names[i]] = wms_layers[i];
+}
 
 var baseLayers = {
   "BRT-Achtergrondkaart [WMTS]": brtRegular,
